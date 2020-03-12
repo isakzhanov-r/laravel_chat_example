@@ -79,6 +79,57 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
+
+        <v-dialog
+                v-model="dialog"
+                width="500">
+            <v-card>
+                <v-card-title>Добавить контакт</v-card-title>
+
+                <v-card-text style="height: 400px;">
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field
+                                    v-on:keyup="findContact"
+                                    ref="find"
+                                    v-model="find.query"
+                                    prepend-icon="mdi-magnify"
+                                    placeholder="Antony"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-list>
+                        <v-list-item
+                                v-for="item in find.results"
+                                :key="item.title"
+                                @click="">
+                            <v-list-item-avatar>
+                                <v-img :src="item.avatar"></v-img>
+                            </v-list-item-avatar>
+
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                                <v-list-item-subtitle v-text="item.email"></v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="primary"
+                            text
+                            @click="dialog = false"
+                    >
+                        I accept
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-navigation-drawer>
 </template>
 
@@ -90,6 +141,11 @@
             not_confirmed: Array
         },
         data: () => ({
+            find: {
+                query: '',
+                results: []
+            },
+            dialog: false,
             drawer: true,
             mini: false,
             title: 'VueMax Admin',
@@ -103,6 +159,15 @@
             getImage(max, min) {
                 var num = Math.floor(Math.random() * (max - min) + min);
                 this.image = require('~client/assets/images/sidebar-' + num + '.jpg');
+            },
+            findContact() {
+                this.find.results = [];
+                if (this.find.query.length > 2) {
+                    this.$axios.get('/api/search/user', {params: {query: this.find.query}})
+                        .then(response => {
+                            this.find.results = response.data;
+                        });
+                }
             }
         }
     };

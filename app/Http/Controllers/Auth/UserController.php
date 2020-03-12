@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
@@ -27,5 +28,13 @@ class UserController extends Controller
         $request->user()->update($data);
 
         return new JsonResource($request->user());
+    }
+
+    public function search(Request $request)
+    {
+        $query  = $request->get('query');
+        $result = User::query()->where('name', 'like', $query . '%')->get();
+
+        return response()->json($result);
     }
 }

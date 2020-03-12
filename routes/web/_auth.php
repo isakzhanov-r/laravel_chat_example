@@ -9,5 +9,9 @@ app('router')
     ->name('user.info');
 
 app('router')
+    ->get('/search/user', 'Auth\UserController@search')
+    ->name('user.search');
+
+app('router')
     ->put('/user/{id}', 'Auth\UserController@update')
     ->name('user.update');
