@@ -77,10 +77,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected function getAvatarAttribute($value)
+    {
+        if (!$value) {
+            return asset('images/no_user.png');
+        }
+
+        return $value;
+    }
+
     public function contacts()
     {
-        return $this->belongsToMany(User::class, 'user_contacts','user_id', 'contact_id')
+        return $this->belongsToMany(User::class, 'user_contacts', 'user_id', 'contact_id')
             ->withPivot(['confirmed']);
+    }
+
+    public function excepted()
+    {
+        return $this->belongsToMany(User::class, 'user_contacts', 'contact_id', 'user_id')
+            ->where('confirmed', 0);
     }
 
     public function contact()

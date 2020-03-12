@@ -15,3 +15,9 @@ app('router')
 app('router')
     ->put('/user/{id}', 'Auth\UserController@update')
     ->name('user.update');
+
+app('router')
+    ->get('contacts/excepted', 'Api\ContactController@excepted');
+
+app('router')
+    ->apiResource('contacts', 'Api\ContactController');

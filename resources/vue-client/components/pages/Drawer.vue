@@ -51,7 +51,7 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-icon>
@@ -62,12 +62,12 @@
 
         <v-divider></v-divider>
 
-        <v-list subheader>
-            <v-subheader>Ждут ответа</v-subheader>
+        <v-list subheader v-if="requested">
+            <v-subheader>Запрошенные контакты</v-subheader>
 
             <v-list-item
-                    v-for="item in not_confirmed"
-                    :key="item.title"
+                    v-for="item in requested"
+                    :key="item.name"
                     @click=""
             >
                 <v-list-item-avatar>
@@ -75,7 +75,7 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </v-list>
@@ -102,7 +102,7 @@
                         <v-list-item
                                 v-for="item in find.results"
                                 :key="item.title"
-                                @click="">
+                                @click="addContact(item)">
                             <v-list-item-avatar>
                                 <v-img :src="item.avatar"></v-img>
                             </v-list-item-avatar>
@@ -138,7 +138,7 @@
         name: 'Drawer',
         props: {
             contacts: Array,
-            not_confirmed: Array
+            requested: Array
         },
         data: () => ({
             find: {
@@ -168,6 +168,9 @@
                             this.find.results = response.data;
                         });
                 }
+            },
+            addContact(item) {
+
             }
         }
     };
