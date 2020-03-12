@@ -1,6 +1,12 @@
 /.idea
 /node_modules
 /public/hot
+/public/css
+/public/fonts
+/public/images
+/public/js
+/public/*.js
+/public/mix-manifest.json
 /public/storage
 /storage/*.key
 /vendor
@@ -8,6 +14,10 @@
 .env.backup
 .phpunit.result.cache
 Homestead.json
+laravel-echo-server.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/*.lock
+/.phpstorm.meta.php
+/_ide_helper.php

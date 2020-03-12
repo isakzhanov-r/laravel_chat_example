@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,20 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+mix
+    .webpackConfig({
+        resolve: {
+            extensions: ['.js', '.json', '.vue'],
+            alias: {
+                '~client': path.join(__dirname, './resources/vue-client')
+            }
+        },
+        node: {
+            fs: "empty",
+            module: "empty"
+        }
+    })
+    .js('resources/vue-client/app.js', 'public/js')
+    .sass('resources/vue-client/assets/scss/styles.scss', 'public/css')
+    .copy('resources/vue-client/assets/images', 'public/images')
+    .version();;

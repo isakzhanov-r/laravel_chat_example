@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+app('router')
+    ->name('api.')
+    ->prefix('api')
+    ->group(\base_path('routes/web/_api.php'));
+
+app('router')
+    ->get('/{path?}', 'IndexController')
+    ->where('path', '.*')
+    ->name('base');
