@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('test-event', function ($user) {
-    return $user;
+Broadcast::channel('new_contacts.{contact_id}', function (\App\Models\User $user, $contact_id) {
+    return (int)$user->id === (int)$contact_id;
 });

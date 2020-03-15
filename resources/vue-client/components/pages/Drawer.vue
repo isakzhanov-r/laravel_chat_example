@@ -125,7 +125,7 @@
                             text
                             @click="dialog = false"
                     >
-                        I accept
+                        Закрыть
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -170,7 +170,13 @@
                 }
             },
             addContact(item) {
-
+                this.$axios.post('/api/contacts', {contact_id: item.id})
+                    .then(response => {
+                        this.$store.commit('contacts/addRequested', {contact: response.data.data});
+                        this.dialog = false;
+                        this.find.query = '';
+                        this.find.results = [];
+                    });
             }
         }
     };

@@ -3,12 +3,54 @@
         <v-toolbar
                 id="core-toolbar"
                 dense
-                style="background: #EEEEEE;">
+                dark
+                style="background: #424242;">
 
             <v-toolbar-title class="tertiary--text font-weight-light">
                 {{ title }}
             </v-toolbar-title>
             <v-spacer/>
+            <v-menu
+                    bottom
+                    left
+                    content-class="dropdown-menu"
+                    offset-y
+                    transition="slide-y-transition">
+                <template v-slot:activator="{ on }">
+                    <v-btn color="grey darken-3" v-on="on" fab dark>
+                        <v-badge color="error" overlap>
+                            <template slot="badge">{{ notifications.excepted.length + notifications.messages.length }}</template>
+                            <v-icon color>mdi-bell</v-icon>
+                        </v-badge>
+                    </v-btn>
+                </template>
+                <v-card v-if="notifications.excepted">
+                    <v-card-text>
+                        <v-list dense>
+                            <v-list-item-title>Запросы на добавление в контакты</v-list-item-title>
+                            <v-list-item v-for="item in notifications.excepted" :key="item.id">
+                                <v-list-item-avatar>
+                                    <v-img :src="item.avatar"></v-img>
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+                    </v-card-text>
+                </v-card>
+                <v-card v-if="notifications.messages">
+                    <v-card-text>
+                        <v-list dense>
+                            <v-list-item-title>Непрочитанные соббщения</v-list-item-title>
+                            <v-list-item v-for="notification in notifications.messages" :key="notification">
+                                <v-list-item-title v-text="notification"/>
+                            </v-list-item>
+                        </v-list>
+                    </v-card-text>
+                </v-card>
+            </v-menu>
             <v-menu
                     bottom
                     left
@@ -66,6 +108,14 @@
 <script>
     export default {
         name: 'Header',
+        props: {
+            notifications: {
+                type: [Array, Object],
+                default: function () {
+                    return [];
+                }
+            }
+        },
         data: () => ({
             title: null,
             confirmLogout: false
@@ -82,7 +132,7 @@
             logout() {
                 let _result = this.$store.dispatch('auth/logout');
                 if (_result) {
-                    location.reload()
+                    location.reload();
                 }
             }
         }

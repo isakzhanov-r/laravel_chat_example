@@ -24,13 +24,19 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserContact extends Model
 {
+    protected $primaryKey = null;
+
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 'contact_id', 'confirmed',
+        'user_id',
+        'contact_id',
+        'confirmed',
     ];
 
     /**

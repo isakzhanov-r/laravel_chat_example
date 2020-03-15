@@ -30,10 +30,21 @@ class UserController extends Controller
         return new JsonResource($request->user());
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $ids \Illuminate\Database\Eloquent\Collection
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(Request $request)
     {
+        $ids = $request->user()->contacts()->pluck('id');
+        $ids->push($request->user()->id);
         $query  = $request->get('query');
-        $result = User::query()->where('name', 'like', $query . '%')->get();
+        $result = User::query()
+            ->whereNotIn('id', $ids->toArray())
+            ->where('name', 'like', $query . '%')
+            ->get();
 
         return response()->json($result);
     }

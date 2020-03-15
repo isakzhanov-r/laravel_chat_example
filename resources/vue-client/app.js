@@ -26,6 +26,7 @@ Vue.use(DatetimePicker);
 Vue.use(require('vue-moment'));
 
 Vue.prototype.$axios = axios;
+Vue.prototype.$axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector('meta[name="csrf-token"]').content;
 Vue.prototype.$axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 Vue.prototype.$axios.defaults.headers.get['Content-Type'] = 'application/json';
 Vue.prototype.$axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

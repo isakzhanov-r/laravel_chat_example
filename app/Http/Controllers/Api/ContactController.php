@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Contacts\StoreRequest;
 use App\Http\Resources\Contacts\ContactCollection;
 use App\Http\Resources\User\UserResource;
 use App\Services\Eloquent\ContactService;
@@ -41,16 +42,12 @@ class ContactController extends Controller
         return UserResource::collection($data->excepted);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $data = $this->services
+            ->addContact($this->user, $request);
+
+        return UserResource::make($data);
     }
 
     /**
