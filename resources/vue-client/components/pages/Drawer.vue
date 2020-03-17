@@ -13,7 +13,7 @@
             :src="image"
             height="100%">
         <v-list-item class="px-2" style="min-height:70px">
-            <v-list-item-avatar color="white">
+            <v-list-item-avatar>
                 <v-img :src="icon"/>
             </v-list-item-avatar>
             <v-list-item-title>
@@ -24,27 +24,40 @@
             </v-btn>
         </v-list-item>
         <v-divider/>
-        <v-list subheader>
-            <v-toolbar>
-                <v-toolbar-title class="white--text">Контакты</v-toolbar-title>
-                <template v-slot:extension>
-                    <v-btn
-                            fab
-                            color="cyan accent-2"
-                            bottom
-                            left
-                            absolute
-                            @click="dialog = !dialog"
-                    >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
+        <v-list v-if="user">
+            <v-list-item :to="{name:'home'}">
+                <v-list-item-avatar>
+                    <v-img :src="user.avatar"></v-img>
+                </v-list-item-avatar>
+            </v-list-item>
+            <v-list-group>
+                <template v-slot:activator>
+                    <v-list-item-content>
+                        <v-list-item-title class="title">{{ user.name }}</v-list-item-title>
+                        <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
+                    </v-list-item-content>
                 </template>
-            </v-toolbar>
-            <v-divider/>
+                <v-list-item>
+                    <v-list-item-content>
+                        <div class="text-center">
+                            Добавить контакт
+                            <v-btn
+                                    fab
+                                    color="cyan accent-2"
+                                    @click="dialog = !dialog">
+                                <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </div>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-group>
+        </v-list>
+        <v-divider/>
+        <v-list subheader>
             <v-list-item
                     v-for="item in contacts"
                     :key="item.title"
-                    @click=""
+                    :to="{name:'dialog',params:{contact_id:item.id}}"
             >
                 <v-list-item-avatar>
                     <v-img :src="item.avatar"></v-img>
@@ -137,6 +150,7 @@
     export default {
         name: 'Drawer',
         props: {
+            user: Object,
             contacts: Array,
             requested: Array
         },

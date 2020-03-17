@@ -55,4 +55,14 @@ class Message extends Model
     protected $casts = [
         'is_read' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'from', 'id');
+    }
+
+    public function contact()
+    {
+        return $this->belongsTo(User::class, 'to', 'id');
+    }
 }

@@ -21,3 +21,6 @@ app('router')
 
 app('router')
     ->apiResource('contacts', 'Api\ContactController');
+
+app('router')
+    ->apiResource('to.messages', 'Api\MessageController');

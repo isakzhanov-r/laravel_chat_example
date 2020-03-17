@@ -102,4 +102,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserContact::class, 'user_id', 'id');
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'from', 'id');
+    }
 }

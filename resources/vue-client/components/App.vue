@@ -1,14 +1,18 @@
 <template>
-    <v-app theme="dark">
+    <space>
         <v-fade-transition mode="out-in">
             <router-view />
         </v-fade-transition>
-    </v-app>
+    </space>
 </template>
 
 <script>
+    import Space from './Space';
     export default {
-        name: 'App'
+        name: 'App',
+        components:{
+            Space
+        }
     };
 </script>
 

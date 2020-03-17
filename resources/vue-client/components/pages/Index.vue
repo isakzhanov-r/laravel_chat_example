@@ -1,6 +1,6 @@
 <template>
     <div>
-        <drawer-section :contacts="contacts" :requested="requested"/>
+        <drawer-section :user="user" :contacts="contacts" :requested="requested"/>
         <header-section :notifications="{excepted,messages:not_read_messages}"/>
         <v-content>
             <v-container fluid>
@@ -22,9 +22,6 @@
 
     export default {
         name: 'Index',
-        data: () => ({
-            not_read_messages: []
-        }),
         components: {
             'header-section': Header,
             'drawer-section': Drawer,
@@ -42,10 +39,14 @@
             },
             excepted() {
                 return this.$store.getters['contacts/excepted'];
+            },
+            not_read_messages(){
+                return this.$store.getters['messages/not_read_messages'];
             }
         },
         created() {
             this.newContacts();
+            this.newMessages();
             this.$store.dispatch('contacts/getContacts');
             this.$store.dispatch('contacts/getExcepted');
         },
@@ -54,6 +55,12 @@
                 this.$echo.private(`new_contacts.${this.user.id}`)
                     .listen('Contacts\\AddEvent', ({contact}) => {
                         this.$store.commit('contacts/addExcepted', {contact: contact});
+                    });
+            },
+            newMessages() {
+                this.$echo.private(`new_messages.${this.user.id}`)
+                    .listen('Messages\\SendEvent', ({message}) => {
+                        this.$store.commit('messages/addMessages', {message: message});
                     });
             }
         }

@@ -6,6 +6,7 @@ const ResetPassword = () => import('~client/pages/auth/ResetPassword').then(m =>
 const ConfirmPassword = () => import('~client/pages/auth/ConfirmPassword').then(m => m.default || m);
 
 const Home = () => import( '~client/pages/Home').then(m => m.default || m);
+const Dialog = () => import( '~client/pages/Dialog').then(m => m.default || m);
 const Profile = () => import( '~client/pages/user/Profile').then(m => m.default || m);
 
 
@@ -13,6 +14,11 @@ export default [
     {
         path: '/home', component: Index, meta: {middleware: 'auth', icon: 'mdi mdi-view-dashboard', title: 'Консоль'}, children: [
             {name: 'home', path: '', component: Home, meta: {title: 'Главная'}}
+        ]
+    },
+    {
+        path: '/dialog/:contact_id', component: Index, meta: {middleware: 'auth', icon: 'mdi mdi-view-dashboard', title: 'Диалог'}, children: [
+            {name: 'dialog', path: '', component: Dialog, meta: {title: 'Диалог'}}
         ]
     },
     {

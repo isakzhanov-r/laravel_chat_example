@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Contacts\StoreRequest;
 use App\Http\Resources\Contacts\ContactCollection;
 use App\Http\Resources\User\UserResource;
+use App\Models\User;
 use App\Services\Eloquent\ContactService;
 use Illuminate\Http\Request;
 
@@ -50,16 +51,10 @@ class ContactController extends Controller
         return UserResource::make($data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        return UserResource::make(User::find($id));
     }
 
     /**

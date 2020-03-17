@@ -11,6 +11,7 @@
             </v-toolbar-title>
             <v-spacer/>
             <v-menu
+                    v-if="notifications.excepted.length > 0 || notifications.messages.length > 0"
                     bottom
                     left
                     content-class="dropdown-menu"
@@ -24,7 +25,7 @@
                         </v-badge>
                     </v-btn>
                 </template>
-                <v-card v-if="notifications.excepted">
+                <v-card v-if="notifications.excepted.length > 0">
                     <v-card-text>
                         <v-list dense>
                             <v-list-item-title>Запросы на добавление в контакты</v-list-item-title>
@@ -40,12 +41,15 @@
                         </v-list>
                     </v-card-text>
                 </v-card>
-                <v-card v-if="notifications.messages">
+                <v-card v-if="notifications.messages.length > 0">
                     <v-card-text>
                         <v-list dense>
-                            <v-list-item-title>Непрочитанные соббщения</v-list-item-title>
+                            <v-list-item-title>Непрочитанные сообщения</v-list-item-title>
                             <v-list-item v-for="notification in notifications.messages" :key="notification">
-                                <v-list-item-title v-text="notification"/>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="getContactName(notification.from)"></v-list-item-title>
+                                    {{ notification.message }}
+                                </v-list-item-content>
                             </v-list-item>
                         </v-list>
                     </v-card-text>
@@ -129,6 +133,11 @@
             }
         },
         methods: {
+            getContactName(id){
+               return  _.find(this.$parent.contacts, contact => {
+                    return contact.id === parseInt(id);
+                }).name
+            },
             logout() {
                 let _result = this.$store.dispatch('auth/logout');
                 if (_result) {
