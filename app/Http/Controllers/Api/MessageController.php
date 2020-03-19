@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Messages\StoreRequest;
 use App\Http\Resources\Messages\MessageResource;
+use App\Models\Message;
 use App\Models\User;
 use App\Services\Eloquent\MessageService;
 use Illuminate\Http\Request;
@@ -21,9 +22,21 @@ class MessageController extends Controller
 
     public function index($to)
     {
-        $data = $this->service
+        $offset = \request()->get('offset');
+        $data   = $this->service
             ->setContact($to)
-            ->getMessages();
+            ->getMessages($offset)
+            ->sortBy('created_at');
+
+        return MessageResource::collection($data);
+    }
+
+    public function notReadMessages()
+    {
+        $data = Message::query()
+            ->where('to', \Auth::id())
+            ->where('is_read', 0)
+            ->get();
 
         return MessageResource::collection($data);
     }

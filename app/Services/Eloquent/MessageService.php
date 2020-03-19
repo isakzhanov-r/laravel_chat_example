@@ -21,9 +21,8 @@ class MessageService
         return $this;
     }
 
-    public function getMessages()
+    public function getMessages(?int $offset = 0)
     {
-
         return Message::query()
             ->where(function ($query) {
                 $query->where('from', auth()->id())->where('to', $this->contact->id);
@@ -31,6 +30,9 @@ class MessageService
             ->orWhere(function ($query) {
                 $query->where('from', $this->contact->id)->where('to', auth()->id());
             })
+            ->latest('created_at')
+            ->offset($offset)
+            ->take(30)
             ->get();
     }
 

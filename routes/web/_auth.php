@@ -23,4 +23,7 @@ app('router')
     ->apiResource('contacts', 'Api\ContactController');
 
 app('router')
+    ->get('/messages/not-read', 'Api\MessageController@notReadMessages');
+
+app('router')
     ->apiResource('to.messages', 'Api\MessageController');

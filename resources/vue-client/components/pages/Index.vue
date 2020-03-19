@@ -49,6 +49,7 @@
             this.newMessages();
             this.$store.dispatch('contacts/getContacts');
             this.$store.dispatch('contacts/getExcepted');
+            this.$store.dispatch('messages/getNotReadMessages');
         },
         methods: {
             newContacts() {
