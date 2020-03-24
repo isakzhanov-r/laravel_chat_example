@@ -33,7 +33,7 @@ class MessageController extends Controller
     public function notReadMessages()
     {
         $data = $this->service
-            ->notReadMessages();
+            ->getUnreadMessages();
 
         return MessageResource::collection($data);
     }

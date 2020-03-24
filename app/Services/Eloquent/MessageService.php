@@ -24,19 +24,16 @@ class MessageService
     public function getMessages()
     {
         $this->read();
+        $ids = [auth()->id(), $this->contact->id];
 
         return Message::query()
-            ->where(function ($query) {
-                $query->where('from', auth()->id())->where('to', $this->contact->id);
-            })
-            ->orWhere(function ($query) {
-                $query->where('from', $this->contact->id)->where('to', auth()->id());
-            })
+            ->whereIn('from', $ids)
+            ->whereIn('to', $ids)
             ->latest('created_at')
             ->get();
     }
 
-    public function notReadMessages()
+    public function getUnreadMessages()
     {
         return Message::query()
             ->where('to', auth()->id())

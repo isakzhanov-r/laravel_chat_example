@@ -23,7 +23,8 @@ app('router')
     ->post('contacts/confirm', 'Api\ContactController@confirm');
 
 app('router')
-    ->apiResource('contacts', 'Api\ContactController');
+    ->apiResource('contacts', 'Api\ContactController')
+    ->except('update', 'destroy');
 
 app('router')
     ->get('/messages/not-read', 'Api\MessageController@notReadMessages');

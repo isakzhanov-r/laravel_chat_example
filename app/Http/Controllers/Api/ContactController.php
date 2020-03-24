@@ -12,32 +12,24 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    protected $user;
-
     protected $services;
 
     public function __construct(ContactService $service)
     {
-        $this->middleware(function ($request, $next) {
-            $this->user = \Auth::user();
-
-            return $next($request);
-        });
-
         $this->services = $service;
     }
 
     public function index()
     {
         $data = $this->services
-            ->getAll($this->user);
+            ->getAll($this->user());
 
         return new ContactCollection($data);
     }
 
     public function excepted()
     {
-        $data = $this->user
+        $data = $this->user()
             ->load('excepted');
 
         return UserResource::collection($data->excepted);
@@ -46,7 +38,7 @@ class ContactController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $this->services
-            ->addContact($this->user, $request);
+            ->addContact($this->user(), $request);
 
         return UserResource::make($data);
     }
@@ -54,7 +46,7 @@ class ContactController extends Controller
     public function confirm(StoreRequest $request)
     {
         $data = $this->services
-            ->confirmContact($this->user, $request);
+            ->confirmContact($this->user(), $request);
 
         return UserResource::make($data);
     }
@@ -64,13 +56,8 @@ class ContactController extends Controller
         return UserResource::make(User::find($id));
     }
 
-    public function update(Request $request, $id)
+    protected function user(): User
     {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
+        return \Auth::user();
     }
 }

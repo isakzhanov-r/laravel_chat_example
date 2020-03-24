@@ -10,7 +10,10 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'contact_id' => ['required', Rule::exists('users', 'id'), Rule::unique('user_contacts', 'contact_id')->where('user_id', auth()->id())],
+            'contact_id' => [
+                'required',
+                Rule::exists('users', 'id'),
+                Rule::unique('user_contacts', 'contact_id')->where('user_id', auth()->id())],
         ];
     }
 

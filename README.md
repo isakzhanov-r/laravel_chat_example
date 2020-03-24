@@ -22,5 +22,14 @@
 - `yarn install && yarn dev`
 - установить laravel-echo-server `yarn global add laravel-echo-server`
 - `laravel-echo-server init` или скопировать `laravel-echo-server.example.json` без `example`
-- `laravel-echo-server start`
+
+## Запуск проекта
+Я использую `homestead` по этому инструкция будет содержать список действий для него.
+После установки зависивостей и настройки `.env` файла нужно запустить очереди и `laravel-echo-server`.
+Очереди работают с помощью redis.
+- в файле `.env` APP_URL должен быть равен "authHost" в файле `laravel-echo-server.json` и ссылке в строке браузера
+- настраиваем redis в `.env` , драйвера вещателя и очередей `BROADCAST_DRIVER=redis` `QUEUE_CONNECTION=redis`
+- подключаемя к `vagrant ssh` и в папке проекта (например:`code/laravel_chat_example` ) запускаем `laravel-echo-server` и `queue`
+- в одном подключении запускаем эхо сервер `laravel-echo-server start`
+- во втором подключении щапускаем очереди `php artisan queue:work`
 
