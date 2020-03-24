@@ -66,10 +66,12 @@
                 <v-list-item-content>
                     <v-list-item-title v-text="item.name"></v-list-item-title>
                 </v-list-item-content>
-
-                <v-list-item-icon>
-                    <v-icon v-if="item.icon" color="pink">mdi-star</v-icon>
-                </v-list-item-icon>
+                <v-chip v-if="item.count_message"
+                        class="ma-2"
+                        color="primary"
+                        text-color="white">
+                    {{ item.count_message }}
+                </v-chip>
             </v-list-item>
         </v-list>
 

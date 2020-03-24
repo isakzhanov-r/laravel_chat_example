@@ -11,16 +11,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AddEvent implements ShouldBroadcast
+class ConfirmEvent implements ShouldBroadcast
 {
-    protected $user;
     protected $contact;
+
+    protected $user;
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(User $user, User $contact)
     {
-        $this->user = $user;
+        $this->user    = $user;
         $this->contact = $contact;
     }
 
@@ -31,11 +32,11 @@ class AddEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('new_contacts.' . $this->contact->id);
+        return new PrivateChannel('confirm_contacts.' . $this->contact->id);
     }
 
     public function broadcastWith()
     {
-        return ['contact' => UserResource::make($this->user)];
+        return ['user' => UserResource::make($this->user)];
     }
 }

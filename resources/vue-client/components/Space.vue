@@ -1,11 +1,5 @@
 <template>
     <v-app theme="dark">
-        <v-img
-                class="space"
-                height="100%"
-                width="100%"
-        />
-
         <canvas id="space" class="space"/>
 
         <slot></slot>

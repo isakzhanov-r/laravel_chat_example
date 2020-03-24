@@ -29,7 +29,7 @@
                     <v-card-text>
                         <v-list dense>
                             <v-list-item-title>Запросы на добавление в контакты</v-list-item-title>
-                            <v-list-item v-for="item in notifications.excepted" :key="item.id">
+                            <v-list-item v-for="item in notifications.excepted" :key="item.id" @click="openContact(item)">
                                 <v-list-item-avatar>
                                     <v-img :src="item.avatar"></v-img>
                                 </v-list-item-avatar>
@@ -45,7 +45,7 @@
                     <v-card-text>
                         <v-list dense>
                             <v-list-item-title>Непрочитанные сообщения</v-list-item-title>
-                            <v-list-item v-for="notification in notifications.messages" :key="notification">
+                            <v-list-item v-for="notification in notifications.messages" :key="notification.message">
                                 <v-list-item-content>
                                     <v-list-item-title v-text="getContactName(notification.from)"></v-list-item-title>
                                     {{ notification.message }}
@@ -106,6 +106,64 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog
+                v-if="item"
+                v-model="confirmContact"
+                max-width="410">
+            <v-card class="mx-auto">
+                <v-img
+                        src="https://cdn.vuetifyjs.com/images/lists/ali.png"
+                        height="300px"
+                        dark>
+                    <v-row class="fill-height">
+                        <v-card-title>
+                            <v-btn dark icon>
+                                <v-icon>mdi-chevron-left</v-icon>
+                            </v-btn>
+                            Добавить контакт
+                        </v-card-title>
+
+                        <v-spacer></v-spacer>
+
+                        <v-card-title class="white--text pl-12 pt-12">
+                            <div class="display-1 pl-12 pt-12">{{ item.name}}</div>
+                        </v-card-title>
+                    </v-row>
+                </v-img>
+
+                <v-list two-line>
+                    <v-list-item @click="">
+                        <v-list-item-icon>
+                            <v-icon color="indigo">mdi-email</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.email }}</v-list-item-title>
+                            <v-list-item-subtitle>Personal</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            v-if="!item.confirmed"
+                            color="deep-purple lighten-2"
+                            text
+                            @click="confirm"
+                    >
+                        Добавить
+                    </v-btn>
+                    <v-btn
+                            color="deep-purple lighten-2"
+                            text
+                            @click="confirmContact = false"
+                    >
+                        Закрыть
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-content>
 </template>
 
@@ -122,7 +180,9 @@
         },
         data: () => ({
             title: null,
-            confirmLogout: false
+            confirmLogout: false,
+            confirmContact: false,
+            item: null
         }),
         mounted() {
             this.title = this.$route.meta.title;
@@ -133,10 +193,25 @@
             }
         },
         methods: {
-            getContactName(id){
-               return  _.find(this.$parent.contacts, contact => {
+            openContact(contact) {
+                this.item = contact;
+                this.confirmContact = true;
+            },
+            confirm() {
+                this.$axios.post('/api/contacts/confirm', {contact_id: this.item.id})
+                    .then(response => {
+                        this.$store.commit('contacts/addContact', {contact: response.data.data});
+                        this.confirmContact = false;
+                        this.find.item = null;
+                    });
+            },
+            getContactName(id) {
+                let contact = _.find(this.$parent.contacts, contact => {
                     return contact.id === parseInt(id);
-                }).name
+                });
+                if (contact) {
+                    return contact.name;
+                }
             },
             logout() {
                 let _result = this.$store.dispatch('auth/logout');

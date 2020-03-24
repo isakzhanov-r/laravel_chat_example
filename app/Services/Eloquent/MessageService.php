@@ -21,8 +21,10 @@ class MessageService
         return $this;
     }
 
-    public function getMessages(?int $offset = 0)
+    public function getMessages()
     {
+        $this->read();
+
         return Message::query()
             ->where(function ($query) {
                 $query->where('from', auth()->id())->where('to', $this->contact->id);
@@ -31,8 +33,14 @@ class MessageService
                 $query->where('from', $this->contact->id)->where('to', auth()->id());
             })
             ->latest('created_at')
-            ->offset($offset)
-            ->take(30)
+            ->get();
+    }
+
+    public function notReadMessages()
+    {
+        return Message::query()
+            ->where('to', auth()->id())
+            ->where('is_read', 0)
             ->get();
     }
 

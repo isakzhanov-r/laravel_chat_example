@@ -26,6 +26,14 @@ export const mutations = {
     },
 
     addContact(state, {contact}) {
+        state.excepted = _.filter(state.excepted, user => {
+            user.id == contact.id;
+        });
+
+        state.requested = _.filter(state.requested, user => {
+            user.id == contact.id;
+        });
+
         state.contacts.push(contact);
     },
     addRequested(state, {contact}) {
@@ -38,15 +46,15 @@ export const mutations = {
 
 // actions
 export const actions = {
-    getContacts({commit}) {
-        axios.get('/api/contacts')
+    async getContacts({commit}) {
+        await axios.get('/api/contacts')
             .then(response => {
                 commit('setContacts', {contacts: response.data.data});
                 commit('setRequested', {requested: response.data.requested});
             });
     },
-    getExcepted({commit}) {
-        axios.get('/api/contacts/excepted')
+    async getExcepted({commit}) {
+        await axios.get('/api/contacts/excepted')
             .then(response => {
                 commit('setExcepted', {excepted: response.data.data});
             });

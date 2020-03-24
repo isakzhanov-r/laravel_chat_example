@@ -22,21 +22,18 @@ class MessageController extends Controller
 
     public function index($to)
     {
-        $offset = \request()->get('offset');
-        $data   = $this->service
+        $data = $this->service
             ->setContact($to)
-            ->getMessages($offset)
+            ->getMessages()
             ->sortBy('created_at');
 
-        return MessageResource::collection($data);
+        return MessageResource::collection($data)->additional(['count' => $data->count()]);
     }
 
     public function notReadMessages()
     {
-        $data = Message::query()
-            ->where('to', \Auth::id())
-            ->where('is_read', 0)
-            ->get();
+        $data = $this->service
+            ->notReadMessages();
 
         return MessageResource::collection($data);
     }
@@ -50,40 +47,4 @@ class MessageController extends Controller
         return MessageResource::make($data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user, $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(User $user, Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user, $id)
-    {
-        //
-    }
 }

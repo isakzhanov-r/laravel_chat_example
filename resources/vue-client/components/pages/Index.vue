@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="wrapper">
         <drawer-section :user="user" :contacts="contacts" :requested="requested"/>
         <header-section :notifications="{excepted,messages:not_read_messages}"/>
         <v-content>
@@ -19,6 +19,7 @@
     import Header from './Header';
     import Drawer from './Drawer';
     import Footer from './Footer';
+    import _ from 'lodash';
 
     export default {
         name: 'Index',
@@ -40,18 +41,28 @@
             excepted() {
                 return this.$store.getters['contacts/excepted'];
             },
-            not_read_messages(){
-                return this.$store.getters['messages/not_read_messages'];
+            not_read_messages() {
+                let messages = this.$store.getters['messages/not_read_messages'];
+                return _.filter(messages, message => {
+                    return message.to === this.user.id && message.from !== parseInt(this.$route.params.contact_id);
+                });
             }
         },
-        created() {
+        mounted() {
             this.newContacts();
             this.newMessages();
+            this.confirmContacts();
             this.$store.dispatch('contacts/getContacts');
             this.$store.dispatch('contacts/getExcepted');
             this.$store.dispatch('messages/getNotReadMessages');
         },
         methods: {
+            confirmContacts() {
+                this.$echo.private(`confirm_contacts.${this.user.id}`)
+                    .listen('Contacts\\ConfirmEvent', ({user}) => {
+                        this.$store.commit('contacts/addContact', {contact: user});
+                    });
+            },
             newContacts() {
                 this.$echo.private(`new_contacts.${this.user.id}`)
                     .listen('Contacts\\AddEvent', ({contact}) => {
@@ -69,5 +80,8 @@
 </script>
 
 <style scoped>
-
+    #wrapper {
+        overflow: hidden;
+        overflow-y: scroll;
+    }
 </style>

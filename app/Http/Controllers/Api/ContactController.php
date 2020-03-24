@@ -51,32 +51,24 @@ class ContactController extends Controller
         return UserResource::make($data);
     }
 
+    public function confirm(StoreRequest $request)
+    {
+        $data = $this->services
+            ->confirmContact($this->user, $request);
+
+        return UserResource::make($data);
+    }
 
     public function show($id)
     {
         return UserResource::make(User::find($id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

@@ -31,17 +31,23 @@ export const mutations = {
 
 // actions
 export const actions = {
-    getMessages({commit}, payload = {}) {
-        axios.get('/api/to/' + payload.contact.id + '/messages')
+    async getMessages({commit}, payload = {}) {
+        await axios.get('/api/to/' + payload.contact.id + '/messages')
             .then(response => {
                 commit('setMessages', {messages: response.data.data});
             });
     },
 
-    getNotReadMessages({commit}){
-        axios.get('/api/messages/not-read')
+    async getNotReadMessages({commit}) {
+        await axios.get('/api/messages/not-read')
             .then(response => {
                 commit('setNotReadMessages', {messages: response.data.data});
             });
+    },
+
+    reedMessages({state}, payload = {}) {
+        state.not_read_messages = _.filter(state.not_read_messages, message => {
+            message.from === payload.contact.id;
+        });
     }
 };

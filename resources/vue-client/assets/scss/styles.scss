@@ -18,6 +18,10 @@
 @import "material-dashboard/fixed-plugin";
 @import "material-dashboard/dropdown";
 
+html {
+    overflow: hidden;
+}
+
 .container {
     &.footer-absolute {
         margin-bottom: 87px;

@@ -9,7 +9,7 @@ import MiddlewareClass from '../middleware/MiddlewareClass';
 Vue.use(VRouter);
 Vue.use(Meta);
 
-let document_title = 'Static Hyundai АВАНГАРД | ';
+let document_title = 'Laravel messages | ';
 
 const router = new VRouter({
     mode: 'history',

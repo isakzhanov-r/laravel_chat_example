@@ -6,6 +6,7 @@ import DatetimePicker from 'vuetify-datetime-picker';
 import Echo from 'laravel-echo';
 import axios from 'axios';
 import App from './components/App';
+import VScroll from './directives/v-scroll';
 
 window.io = require('socket.io-client');
 const vuetifyOptions = {
@@ -24,6 +25,7 @@ const vuetifyOptions = {
 Vue.use(Vuetify);
 Vue.use(DatetimePicker);
 Vue.use(require('vue-moment'));
+Vue.use(VScroll);
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector('meta[name="csrf-token"]').content;
